@@ -8,11 +8,14 @@
 #include <iostream>
 #include "gstnvdsmeta.h"
 
-#define STREAMER TRUE
+#define STREAMER 1
+#define FPS 30
+#define CAMERA_MODE 0
+#define MUXER_OUTPUT_WIDTH 4032
+#define MUXER_OUTPUT_HEIGHT 3040
+#define BITRATE 16000000
+#define FILE_PATH "video.mp4"
 #define GST_CAPS_FEATURES_NVMM "memory:NVMM"
-#define MUXER_OUTPUT_WIDTH 1280
-#define MUXER_OUTPUT_HEIGHT 720
-#define FPS 60
 #define MUXER_BATCH_TIMEOUT_USEC 10000
 
 using namespace std;
@@ -25,11 +28,12 @@ public:
     GstElement *pipeline = NULL, *streammux = NULL, *nvvideoconvert1 = NULL,
      *nvtiler = NULL, *transform = NULL,  *sink = NULL;
 
+    GstElement *nvosd, *nvvideoconvert2, *queue1,
+    * encoder = NULL, *parser = NULL, *qtmux = NULL, *filesink = NULL; 
+    GstElement *capsfilter1;
+
     GstBus *bus = NULL;
     guint bus_watch_id;
-    GstPad *osd_src_pad = NULL;
-
-    guint pgie_batch_size;
 
     void createElements();
 
